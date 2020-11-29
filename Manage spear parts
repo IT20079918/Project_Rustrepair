@@ -1,0 +1,32 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+
+public class Sparepart extends javax.swing.JFrame {
+    
+    public Sparepart() {
+        initComponents();
+        
+    }
+   
+    Connection con1;
+    PreparedStatement insert,insert2;
+    
+   
+    private void txtsidActionPerformed(java.awt.event.ActionEvent evt) {                                       
+        // TODO add your handling code here:
+    }                                      
+
+    private void txtppriceActionPerformed(java.awt.event.ActionEvent evt) {                                          
+        // TODO add your handling code here:
+    }                                         
+
+    private void txtpnameActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        // TODO add your handling code here:
