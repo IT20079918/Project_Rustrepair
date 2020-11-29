@@ -1,0 +1,132 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
+
+public class Report extends javax.swing.JFrame {
+
+    
+    public Report() {
+        initComponents();
+    }
+    Connection con1;
+    PreparedStatement insert;
+  
+ private void addMouseClicked(java.awt.event.MouseEvent evt) {                                 
+        // TODO add your handling code here:
+        String description=txtdes.getText();
+        int expence=Integer.parseInt(txtexpence.getText());
+        if(description.equals("") && expence==0){
+            JOptionPane.showMessageDialog(this,"Enter Expencess Correctly");
+        }else{    
+                try{
+                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            
+                try{
+                con1 = DriverManager.getConnection("");
+                insert= con1.prepareStatement("insert into report(description,expence)values(?,?)");
+                insert.setString(1,description);
+                insert.setInt(2,expence);
+                
+                insert.executeUpdate();
+                }
+                catch(SQLException sqle) {
+                System.out.println("Sql Exception :"+sqle.getMessage());
+                    }
+                }
+                 catch(ClassNotFoundException e) {
+                 System.out.println("Class Not Found Exception :" + e.getMessage());
+                }
+                JOptionPane.showMessageDialog(this,"Record Added Succesfuly");
+                
+        }
+                txtdes.setText("");
+                txtexpence.setText("");
+                txtdes.requestFocus();
+    }                                  
+
+    private void disposeMouseEntered(java.awt.event.MouseEvent evt) {                                     
+        // TODO add your handling code here:
+
+    }                                    
+
+    private void disposeMouseExited(java.awt.event.MouseEvent evt) {                                    
+        // TODO add your handling code here:
+
+    }                                   
+
+    private void showMouseClicked(java.awt.event.MouseEvent evt) {                                  
+        try {
+            // TODO add your handling code here:
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            try {
+                con1 = DriverManager.getConnection("");
+                try {
+                    JasperDesign jdesign=JRXmlLoader.load("");
+                    String query="select * from report";
+                    JRDesignQuery updateQuery=new JRDesignQuery();
+                    updateQuery.setText(query);
+                    jdesign.setQuery(updateQuery);
+                    JasperReport jReport=JasperCompileManager.compileReport(jdesign);
+                    JasperPrint jprint=JasperFillManager.fillReport(jReport, null,con1);
+                    JasperViewer.viewReport(jprint);
+                } catch (JRException ex) {
+                    Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }                               
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Report.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Report.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Report.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Report.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Report().setVisible(true);
+            }
+        });
+    }
